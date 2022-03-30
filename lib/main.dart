@@ -24,20 +24,35 @@ class _InfinityScrollPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView.builder(
-        itemCount: 100,
-        itemBuilder: (BuildContext context, int index) {
-          return Card(
-            child: Padding(
+        appBar: AppBar(
+          title: const Text("paging example"),
+        ),
+        body: Column(
+          children: [
+            const SizedBox(
+              height: 100,
               child: Text(
-                index.toString(),
-                style: const TextStyle(fontSize: 20.0),
+                "text",
+                style: TextStyle(fontSize: 40.0),
               ),
-              padding: const EdgeInsets.all(20.0),
             ),
-          );
-        },
-      ),
-    );
+            Flexible(
+              child: ListView.builder(
+                itemCount: 100,
+                itemBuilder: (BuildContext context, int index) {
+                  return Card(
+                    child: Padding(
+                      child: Text(
+                        index.toString(),
+                        style: const TextStyle(fontSize: 20.0),
+                      ),
+                      padding: const EdgeInsets.all(20.0),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ));
   }
 }
