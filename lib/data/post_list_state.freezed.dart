@@ -23,7 +23,7 @@ class _$PostListStateTearOff {
       bool hasNext = false,
       int page = 1,
       String? query,
-      PageState pageState = const PageStateLoading()}) {
+      AsyncValue<dynamic> pageState = const AsyncLoading()}) {
     return _PostListState(
       posts: posts,
       hasNext: hasNext,
@@ -43,7 +43,7 @@ mixin _$PostListState {
   bool get hasNext => throw _privateConstructorUsedError;
   int get page => throw _privateConstructorUsedError;
   String? get query => throw _privateConstructorUsedError;
-  PageState get pageState => throw _privateConstructorUsedError;
+  AsyncValue<dynamic> get pageState => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $PostListStateCopyWith<PostListState> get copyWith =>
@@ -60,9 +60,7 @@ abstract class $PostListStateCopyWith<$Res> {
       bool hasNext,
       int page,
       String? query,
-      PageState pageState});
-
-  $PageStateCopyWith<$Res> get pageState;
+      AsyncValue<dynamic> pageState});
 }
 
 /// @nodoc
@@ -102,15 +100,8 @@ class _$PostListStateCopyWithImpl<$Res>
       pageState: pageState == freezed
           ? _value.pageState
           : pageState // ignore: cast_nullable_to_non_nullable
-              as PageState,
+              as AsyncValue<dynamic>,
     ));
-  }
-
-  @override
-  $PageStateCopyWith<$Res> get pageState {
-    return $PageStateCopyWith<$Res>(_value.pageState, (value) {
-      return _then(_value.copyWith(pageState: value));
-    });
   }
 }
 
@@ -126,10 +117,7 @@ abstract class _$PostListStateCopyWith<$Res>
       bool hasNext,
       int page,
       String? query,
-      PageState pageState});
-
-  @override
-  $PageStateCopyWith<$Res> get pageState;
+      AsyncValue<dynamic> pageState});
 }
 
 /// @nodoc
@@ -171,7 +159,7 @@ class __$PostListStateCopyWithImpl<$Res>
       pageState: pageState == freezed
           ? _value.pageState
           : pageState // ignore: cast_nullable_to_non_nullable
-              as PageState,
+              as AsyncValue<dynamic>,
     ));
   }
 }
@@ -184,7 +172,7 @@ class _$_PostListState implements _PostListState {
       this.hasNext = false,
       this.page = 1,
       this.query,
-      this.pageState = const PageStateLoading()});
+      this.pageState = const AsyncLoading()});
 
   @JsonKey()
   @override
@@ -199,7 +187,7 @@ class _$_PostListState implements _PostListState {
   final String? query;
   @JsonKey()
   @override
-  final PageState pageState;
+  final AsyncValue<dynamic> pageState;
 
   @override
   String toString() {
@@ -239,7 +227,7 @@ abstract class _PostListState implements PostListState {
       bool hasNext,
       int page,
       String? query,
-      PageState pageState}) = _$_PostListState;
+      AsyncValue<dynamic> pageState}) = _$_PostListState;
 
   @override
   List<String> get posts;
@@ -250,7 +238,7 @@ abstract class _PostListState implements PostListState {
   @override
   String? get query;
   @override
-  PageState get pageState;
+  AsyncValue<dynamic> get pageState;
   @override
   @JsonKey(ignore: true)
   _$PostListStateCopyWith<_PostListState> get copyWith =>

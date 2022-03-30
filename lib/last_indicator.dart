@@ -8,9 +8,11 @@ class LastIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("build progress");
     return VisibilityDetector(
       key: const Key('for detect visibility'),
       onVisibilityChanged: (info) {
+        print("progress visibility changed: ${info.visibleFraction}");
         if (info.visibleFraction > 0.9) {
           onVisible();
         }

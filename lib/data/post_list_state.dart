@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:paging_example/data/page_state.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 part 'post_list_state.freezed.dart';
 
@@ -10,6 +10,6 @@ class PostListState with _$PostListState {
     @Default(false) bool hasNext,
     @Default(1) int page,
     String? query,
-    @Default(PageStateLoading()) PageState pageState,
+    @Default(AsyncLoading()) AsyncValue pageState,
   }) = _PostListState;
 }

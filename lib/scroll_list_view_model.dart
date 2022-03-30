@@ -1,7 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import 'data/page_state.dart';
 import 'data/post_list_state.dart';
 
 final postListControllerProvider =
@@ -29,7 +28,8 @@ class PostListController extends StateNotifier<PostListState> {
   Future<void> fetch({
     bool loadMore = false,
   }) async {
-    state = state.copyWith(pageState: const PageStateLoading());
+    print("fetch, loadMore: $loadMore");
+    state = state.copyWith(pageState: const AsyncValue.loading());
 
     // final newItems = await _repo.fetch(
     //   page: state.page,
@@ -37,11 +37,13 @@ class PostListController extends StateNotifier<PostListState> {
     //   query: state.query,
     // );
     final newItems = await fetchNextListByDummyRepository();
+    print("new size: ${newItems.length}");
     state = state.copyWith(
       posts: [if (loadMore) ...state.posts, ...newItems],
       hasNext: newItems.length >= perPage,
-      pageState: const PageStateSuccess(),
+      pageState: const AsyncValue.data(0),
     );
+    print("updated size: ${state.posts.length}");
   }
 
   Future<List<String>> fetchNextListByDummyRepository() async =>
@@ -60,8 +62,11 @@ class PostListController extends StateNotifier<PostListState> {
   }
 
   void loadMore() {
-    setPage(state.page + 1);
-    fetch(loadMore: true);
+    print("loadMore, state: ${state.pageState}");
+    if (state.pageState is! AsyncLoading) {
+      setPage(state.page + 1);
+      fetch(loadMore: true);
+    }
   }
 
   void setQuery(String? value) async {
