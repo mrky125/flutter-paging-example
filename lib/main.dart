@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -20,21 +21,36 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class _InfinityScrollPage extends StatelessWidget {
+// StateProviderを使い受け渡すデータを定義する
+// ※ Providerの種類は複数あるが、ここではデータを更新できるStateProviderを使う
+final countProvider = StateProvider((ref) {
+  return 0;
+});
+
+// ConsumerWidgetを使うとbuild()からデータを受け取る事ができる
+class _InfinityScrollPage extends ConsumerWidget {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    // 値が更新されたら自動的に反映される
+    final count = ref.watch(countProvider);
+
     return Scaffold(
         appBar: AppBar(
           title: const Text("paging example"),
         ),
         body: Column(
           children: [
-            const SizedBox(
-              height: 100,
-              child: Text(
-                "text",
-                style: TextStyle(fontSize: 40.0),
+            GestureDetector(
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 40.0),
+                child: Text(
+                  "count $count",
+                  style: const TextStyle(fontSize: 40.0),
+                ),
               ),
+              onTap: () {
+                ref.read(countProvider.notifier).state += 1;
+              },
             ),
             Flexible(
               child: ListView.builder(
