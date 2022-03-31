@@ -8,7 +8,7 @@ class LastIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("build progress");
+    print("build progress, $hashCode");
     return VisibilityDetector(
       key: const Key('for detect visibility'),
       onVisibilityChanged: (info) {

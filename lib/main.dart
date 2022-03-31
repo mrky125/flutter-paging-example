@@ -36,10 +36,65 @@ final postListScrollControllerProvider = Provider((ref) => ScrollController());
 class _InfinityScrollPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    const _threshold = 0.7;
+
     // 値が更新されたら自動的に反映される
     final state = ref.watch(postListControllerProvider);
     final posts = state.posts;
     final controller = ref.read(postListControllerProvider.notifier);
+
+    return Scaffold(
+      backgroundColor: Colors.white70,
+      body: NotificationListener<ScrollNotification>(
+        onNotification: (ScrollNotification scrollInfo) {
+          // when scrolled
+          final scrollProportion =
+              scrollInfo.metrics.pixels / scrollInfo.metrics.maxScrollExtent;
+          print("state: ${state.pageState}, proportion: $scrollProportion");
+          if (state.pageState is! AsyncLoading &&
+              scrollProportion > _threshold) {
+            controller.loadMore();
+          }
+          return false;
+        },
+        child: posts.isNotEmpty
+            // if items exist
+            ? ListView.builder(
+                itemCount: posts.length + (state.hasNext ? 1 : 0),
+                itemBuilder: (BuildContext _context, int index) {
+                  if (index == posts.length && state.hasNext) {
+                    print("index: $index, length: ${posts.length}");
+                    // アイテム数が少なくて画面内に収まった場合、onNotificationで通知されないので
+                    // プログレスの表示を契機にして次ページを読み込む
+                    // hack: しかし次ページ表示後にもアイテム数少なくてプログレスが表示する場合、
+                    //  onVisibilityChangedが通知されないのでさらに次ページを読み込めない
+                    return LastIndicator(controller.loadMore);
+                  }
+                  return Card(
+                    child: Padding(
+                      child: Text(
+                        index.toString(),
+                        style: const TextStyle(fontSize: 20.0),
+                      ),
+                      padding: const EdgeInsets.all(20.0),
+                    ),
+                  );
+                },
+              )
+            // if items empty
+            : ListView.builder(
+                itemCount: 1,
+                itemBuilder: (BuildContext _context, int index) {
+                  return const Center(
+                    child: Padding(
+                      padding: EdgeInsets.only(top: 12, bottom: 12),
+                      child: CircularProgressIndicator(),
+                    ),
+                  );
+                },
+              ),
+      ),
+    );
 
     return Scaffold(
       backgroundColor: Colors.white70,
